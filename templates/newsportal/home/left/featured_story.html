@@ -10,7 +10,7 @@
                     </p>
                     <a href="article.html" class="btn btn-success">Read More <i class="bi bi-arrow-right-short"></i></a>
                     <p class="card-text mt-2">
-                        <small class="text-muted">{{ featured_post.published_at }}</small>
+                        <small class="text-muted">Published at: {{ featured_post.published_at|date:"F j, Y" }}</small>
                     </p>
                 </div>
             </div>

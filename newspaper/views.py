@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from newspaper.models import Post
+from newspaper.models import Post, Advertisement
 from django.views.generic import ListView
 from django.utils import timezone
 from datetime import timedelta
@@ -32,5 +32,18 @@ class HomeView(ListView):
             )
             .order_by("-published_at", "-views_count")[:5]
         )
-
+        context["advertisement"] = Advertisement.objects.all().order_by("-created_at").first()
+        
         return context
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = "newsportal/list/list.html"
+    context_object_name = "posts"
+    paginate_by = 1
+
+    def get_queryset(self):
+        return Post.objects.filter(
+            published_at__isnull = False, status= "activate"
+        ).order_by("-published_at")
