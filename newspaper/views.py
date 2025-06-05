@@ -22,7 +22,7 @@ class HomeView(SidebarMixin, ListView):
     context_object_name = "posts"
     queryset = Post.objects.filter(
         published_at__isnull=False, status="active"
-    ).order_by("-published_at")[:4]  # Changed to descending order
+    ).order_by("-published_at")[:4]  
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,7 +76,7 @@ class PostDetailView(SidebarMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        current_post = self.get_object
+        current_post = self.get_object()
         current_post.views_count +=1
         current_post.save()
 
