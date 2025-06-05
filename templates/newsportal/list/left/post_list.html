@@ -1,4 +1,5 @@
 <!-- News Item 1 -->
+ {% for post in posts %}
           <div class="card mb-4 shadow-sm news-list-item">
             <div class="row g-0">
               <div class="col-md-4">
@@ -8,15 +9,15 @@
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <h5 class="card-title">Latest News Article Title One</h5>
-                  <p class="card-text">
-                    This is a short description for the first latest news article. It gives a glimpse into the content.
+                  <h5 class="card-title">{{ post.title }}</h5>
+                  <p class="card-text">{{ post.content }}
                   </p>
                   <p class="card-text">
                     <small class="text-muted">Published: April 3, 2025</small>
                   </p>
-                  <a href="article.html" class="btn btn-outline-success btn-sm">Read More</a>
+                  <a href="{% url 'post-detail' post.pk %}" class="btn btn-outline-success btn-sm">Read More</a>
                 </div>
               </div>
             </div>
           </div>
+          {% endfor %}

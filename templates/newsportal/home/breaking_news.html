@@ -5,7 +5,7 @@
             <span class="badge bg-danger me-2">BREAKING</span>
             <marquee behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
                 {% for post in weekly_top_posts %}
-                <a href="article.html" class="text-dark text-decoration-none me-4">{{ post.title|truncatechars:50 }}</a>
+                <a href="{% url 'post-detail' post.pk %}" class="text-dark text-decoration-none me-4">{{ post.title|truncatechars:50 }}</a>
                 {% endfor %}
             </marquee>
         </div>

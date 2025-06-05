@@ -9,7 +9,7 @@
                         <li>
                             <img src="{{ post.featured_image.url }}" alt="Popular 1" width="70" height="70" />
                             <div>
-                                <a href="article.html" class="popular-title-link">{{ post.title }}</a>
+                                <a href="{% url 'post-detail' post.pk %}" class="popular-title-link">{{ post.title }}</a>
                                 <p class="popular-description">{{ post.content|truncatechars:50 }}</p>
                             </div>
                         </li>
