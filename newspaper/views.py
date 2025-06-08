@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from newspaper.models import Post, Advertisement
+from newspaper.models import Post, Advertisement, Tag
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from datetime import timedelta
