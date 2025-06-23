@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bn8$!wom#jco(y-pk8)^#(i87&^cnlq=p(%32$t@h4!x6xvxfr'
+SECRET_KEY = 'django-insecure-+q))w)t1^-oho%65-*3h_hiz6$*pqcyao*a4mp%jkc=fj0soix'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,16 +31,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #built-in apps
+    # default
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 3rd-party apps
+    # third party
     'rest_framework',
-    # local apps
+    # local
     'newspaper',
     'accounts',
     'api',
@@ -69,8 +69,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'newspaper.nav.navigation',
-            ], 
-
+            ],
         },
     },
 ]
@@ -124,18 +123,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = ["static"]
+STATICFILES_DIRS=['static']
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = "media"
+MEDIA_URL="/media/"
+MEDIA_ROOT ="media"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 10
 }
