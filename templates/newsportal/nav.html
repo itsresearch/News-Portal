@@ -3,7 +3,7 @@
     <!-- Elegant Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top elegant-navbar">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="/">NewsPortal</a>
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">NewsPortal</a>
         <button class="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
@@ -16,10 +16,13 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
+              <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                 aria-current="page"
+                 href="{% url 'home' %}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="latest-news.html">Latest News</a>
+              <a class="nav-link {% if request.resolver_match.url_name == 'post-list' %}active{% endif %}"
+                 href="{% url 'post-list' %}">Latest News</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle"
@@ -29,32 +32,37 @@
                  aria-expanded="false">Categories</a>
               <ul class="dropdown-menu">
                 {% for category in categories %}
-                <li>
-                  <a class="dropdown-item" href="category.html">{{ category.name }}</a>
-                </li>
+                  <li>
+                    <a class="dropdown-item"
+                       href="{% url 'post-by-category' category.id %}">{{ category.name }}</a>
+                  </li>
+                {% empty %}
+                  <li class="dropdown-item text-muted">No categories yet</li>
                 {% endfor %}
-                  <hr class="dropdown-divider" />
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'categories' %}">All Categories</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="all-categories.html">All Categories</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="all-tags.html">All Tags</a>
+                  <a class="dropdown-item" href="{% url 'tags' %}">All Tags</a>
                 </li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about.html">About Us</a>
+              <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+                 href="{% url 'about' %}">About Us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="contact.html">Contact Us</a>
+              <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+                 href="{% url 'contact' %}">Contact Us</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#newsletter-section">Newsletter</a>
             </li>
           </ul>
-          <form class="d-flex me-3" role="search">
+          <form class="d-flex me-3" role="search" method="get" action="{% url 'search' %}">
             <input class="form-control form-control-sm me-2"
+                   name="query"
                    type="search"
                    placeholder="Search..."
                    aria-label="Search" />
@@ -79,7 +87,7 @@
           </form>
           {% else %}
           <a href="{% url 'accounts:login' %}" class="btn btn-outline-success btn-sm me-2">Login</a>
-          <a href="{% url 'accounts:register' %}" class="btn ben-success btn-sm">Register</a>
+          <a href="{% url 'accounts:register' %}" class="btn btn-success btn-sm">Register</a>
           {% endif %}
         </div> 
       </div>

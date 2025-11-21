@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from newspaper.models import Post, Advertisement, Category, Tag, Contact
-from django.views.generic import ListView, DetailView, View, CreateView
+from django.views.generic import ListView, DetailView, View, CreateView, TemplateView
 from django.utils import timezone
 from datetime import timedelta
 from newspaper.forms import CommentForm, ContactForm, NewsLetterForm
@@ -19,12 +19,12 @@ class SidebarMixin:
         context["popular_posts"]=Post.objects.filter(
             published_at__isnull=False, status="active").order_by("-published_at")[:5]
         
-        context["advertisment"]=Advertisement.objects.all().order_by("-created_at").first()
+        context["advertisement"]=Advertisement.objects.all().order_by("-created_at").first()
 
         return context
     
 class HomeView(SidebarMixin, ListView):
-    model=Post, 
+    model=Post
     template_name="newsportal/home.html"
     context_object_name="posts"
     queryset=Post.objects.filter(
@@ -94,13 +94,13 @@ class CommentView(View):
             popular_posts = Post.objects.filter(
                 published_at__isnull=False, status="active"
             ).order_by("-published_at")[:5]
-            advertisment = Advertisment.objects.order_by("-created_at").first()
+            advertisement = Advertisement.objects.order_by("-created_at").first()
 
             return render(request, "newsportal/detail/detail.html", {
                 "post": post,
                 "form": form,
                 "popular_posts": popular_posts,
-                "advertisment": advertisment
+                "advertisment": advertisement
             })
         
 class PostByCategoryView(SidebarMixin, ListView):
@@ -147,9 +147,19 @@ class ContactView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy("contact")
     success_message = "Your message has been sent successfully!"
 
-class AboutView(View):
+class AboutView(SidebarMixin, TemplateView):
     template_name = "newsportal/about.html"
-    context_object_name = "about"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total_posts"] = Post.objects.filter(
+            published_at__isnull=False, status="active"
+        ).count()
+        context["total_categories"] = Category.objects.count()
+        context["latest_posts"] = Post.objects.filter(
+            published_at__isnull=False, status="active"
+        ).order_by("-published_at")[:3]
+        return context
 
 class NewsLetterView(View):
     def post(self, request):
@@ -168,7 +178,7 @@ class NewsLetterView(View):
             else:
                 return JsonResponse({
                 "success": False,
-                "message": "Cannot suscribe to the newsletter.",
+                "message": "Cannot subscribe to the newsletter.",
             }, 
             status=400)
         else:
@@ -184,8 +194,9 @@ class PostSearchView(View):
     template_name="newsportal/list/list.html" 
     
     def get(self, request, *args, **kwargs):
-        print(request.GET)
-        query=request.GET["query"]
+        query=request.GET.get("query", "").strip()
+        if not query:
+            return redirect("post-list")
         post_list=Post.objects.filter(
             (Q(title__icontains=query) | Q(content__icontains=query)) & Q(status="active") 
             & Q(published_at__isnull=False)
@@ -202,7 +213,7 @@ class PostSearchView(View):
         popular_posts=Post.objects.filter(
             published_at__isnull=False, status="active"
         ).order_by("-published_at")[:5]
-        advertisment=Advertisement.objects.all().order_by("-created_at").first()
+        advertisement=Advertisement.objects.all().order_by("-created_at").first()
         
         return render(
             request,
@@ -211,7 +222,7 @@ class PostSearchView(View):
                 "page_obj": posts,
                 "query": query,
                 "popular_posts": popular_posts,
-                "advertisment": advertisment,
+                "advertisement": advertisement,
             },
         )
     

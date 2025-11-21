@@ -1,4 +1,4 @@
-{% extend "newspotral/base.html%}
+{% extends "newsportal/base.html" %}
 {% block content %}
     <div class="container mt-4">
       <h1 class="mb-4 section-title">
@@ -57,5 +57,34 @@
         </div>
       </div>
 
+      <section class="mt-5">
+        <h2 class="mb-4 section-title">
+          <span>Latest Highlights</span>
+        </h2>
+        <div class="row">
+          {% for post in latest_posts %}
+          <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+              <img src="{{ post.featured_image.url }}"
+                   class="card-img-top"
+                   alt="{{ post.title }}" />
+              <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ post.content|truncatechars:80 }}</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">{{ post.published_at|date:"F j, Y" }}</small>
+                <a href="{% url 'post-detail' post.pk %}" class="btn btn-link btn-sm float-end">Read more</a>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-muted">No recent posts available yet.</p>
+          {% endfor %}
+        </div>
+        <p class="mt-3 text-muted">
+          Serving {{ total_posts }} published stories across {{ total_categories }} categories.
+        </p>
+      </section>
     </div>
 {% endblock content %}
